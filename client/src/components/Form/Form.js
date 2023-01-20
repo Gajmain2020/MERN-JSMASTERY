@@ -32,9 +32,16 @@ const Form = ({ currentId, setCurrentId }) => {
     if (post) setPostData(post);
   }, [post]);
 
+  // const [showError, setShowError] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    // console.log(postData);
+    // if (postData.title === "") {
+    //   setShowError(true);
+    //   return;
+    // }
+    // setShowError(false);
     if (currentId === 0) {
       dispatch(createPost(postData));
     } else {
@@ -92,7 +99,8 @@ const Form = ({ currentId, setCurrentId }) => {
               onChange={(e) =>
                 setPostData({ ...postData, title: e.target.value })
               }
-            ></input>
+            />
+            {/* {showError ? "Please Enter Title" : null} */}
 
             {/* For Message */}
             <input

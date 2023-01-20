@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
+import { BrowserRouter, Switch, Route, Routes } from "react-router-dom";
 
-//ADDING POSTS COMPONENT
-import Posts from "./components/Posts/Posts";
+//    ADDING NAVBAR COMPONENT
 import Navbar from "./components/Navbar/Navbar";
 
-//ADDING FORM COMPONENTS
-import Form from "./components/Form/Form";
+//    ADDING Auth COMPONENT
+import Auth from "./components/Auth/Auth";
 
-import { getPosts } from "./actions/posts";
+//    ADDING HOME COMPONENTS
+import Home from "./components/Home/Home";
+
 //styling elements
 import "bootstrap/dist/css/bootstrap.css";
 import "./styles.css";
@@ -18,30 +19,17 @@ import "./styles.css";
 
 const App = () => {
   // const classes = useStyles();
-  const [currentId, setCurrentId] = useState(0);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getPosts());
-  }, [currentId, dispatch]);
 
   return (
-    <>
+    <BrowserRouter>
       <div className="container">
         <Navbar />
-        <div className="content">
-          <div className="row align-items-start">
-            <div className="col">
-              <Posts setCurrentId={setCurrentId} />
-            </div>
-            <div className="col">
-              <Form currentId={currentId} setCurrentId={setCurrentId} />
-            </div>
-          </div>
-        </div>
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/auth" exact component={Auth} />
+        </Switch>
       </div>
-    </>
+    </BrowserRouter>
   );
 };
 
