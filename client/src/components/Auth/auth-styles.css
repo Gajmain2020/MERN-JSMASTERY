@@ -1,0 +1,25 @@
+.main-container {
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+}
+
+.submit-btn {
+  width: 100%;
+  padding-top: 1.3em;
+  padding-bottom: 1.3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form2 {
+  width: 80%;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.alert {
+  margin-left: 1em;
+  margin-top: 1em;
+}

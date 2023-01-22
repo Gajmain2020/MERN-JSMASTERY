@@ -7,6 +7,8 @@ import FileBase from "react-file-base64";
 //  Importing Actions
 import { createPost, updatePost } from "../../actions/posts";
 
+import { Paper, Typography } from "@mui/material";
+
 //  Styling Elements
 import "bootstrap/dist/css/bootstrap.css";
 import "./styles.css";
@@ -15,7 +17,6 @@ import "./styles.css";
 
 const Form = ({ currentId, setCurrentId }) => {
   const [postData, setPostData] = useState({
-    creator: "",
     title: "",
     message: "",
     tags: "",
@@ -28,6 +29,8 @@ const Form = ({ currentId, setCurrentId }) => {
 
   const dispatch = useDispatch();
 
+  const user = JSON.parse(localStorage.getItem("profile"));
+
   useEffect(() => {
     if (post) setPostData(post);
   }, [post]);
@@ -36,24 +39,32 @@ const Form = ({ currentId, setCurrentId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(postData);
-    // if (postData.title === "") {
-    //   setShowError(true);
-    //   return;
-    // }
-    // setShowError(false);
+
     if (currentId === 0) {
-      dispatch(createPost(postData));
+      dispatch(createPost({ ...postData, name: user?.result?.name }));
+      clear();
     } else {
-      dispatch(updatePost(currentId, postData));
+      dispatch(
+        updatePost(currentId, { ...postData, name: user?.result?.name })
+      );
+      clear();
     }
-    clear();
   };
+
+  if (!user?.result?.name) {
+    return (
+      <Paper>
+        <Typography varient="h6" align="center">
+          {" "}
+          Please Sign In to create your own memories and like other's memories.
+        </Typography>
+      </Paper>
+    );
+  }
 
   const clear = () => {
     setCurrentId(0);
     setPostData({
-      creator: "",
       title: "",
       message: "",
       tags: "",
@@ -76,75 +87,61 @@ const Form = ({ currentId, setCurrentId }) => {
           className="main-form"
           onSubmit={handleSubmit}
         >
-          {/* for creator */}
-          <div className="inputs">
-            <input
-              type="text"
-              name="creator"
-              className="input-field"
-              placeholder="Creator"
-              value={postData.creator}
-              onChange={(e) =>
-                setPostData({ ...postData, creator: e.target.value })
-              }
-            ></input>
+          {/* For Title */}
+          <input
+            type="text"
+            name="title"
+            className="input-field"
+            placeholder="Title"
+            value={postData.title}
+            onChange={(e) =>
+              setPostData({ ...postData, title: e.target.value })
+            }
+          />
+          {/* {showError ? "Please Enter Title" : null} */}
 
-            {/* For Title */}
-            <input
-              type="text"
-              name="title"
-              className="input-field"
-              placeholder="Title"
-              value={postData.title}
-              onChange={(e) =>
-                setPostData({ ...postData, title: e.target.value })
+          {/* For Message */}
+          <input
+            type="text"
+            name="message"
+            className="input-field"
+            placeholder="Message"
+            value={postData.message}
+            onChange={(e) =>
+              setPostData({ ...postData, message: e.target.value })
+            }
+          ></input>
+
+          {/* For Tags */}
+          <input
+            type="text"
+            name="tags"
+            className="input-field"
+            placeholder="Tags"
+            value={postData.tags}
+            onChange={(e) =>
+              setPostData({ ...postData, tags: e.target.value.split(",") })
+            }
+          ></input>
+
+          {/* input file */}
+          <div className="input-field file-input">
+            <FileBase
+              type="file"
+              multiple={false}
+              onDone={({ base64 }) =>
+                setPostData({ ...postData, selectedFile: base64 })
               }
             />
-            {/* {showError ? "Please Enter Title" : null} */}
+            {/* Submit Button */}
+            <button className="btn btn-success input-field" type="submit">
+              Click To Submit
+            </button>
+            {/* Reset Button */}
 
-            {/* For Message */}
-            <input
-              type="text"
-              name="message"
-              className="input-field"
-              placeholder="Message"
-              value={postData.message}
-              onChange={(e) =>
-                setPostData({ ...postData, message: e.target.value })
-              }
-            ></input>
-
-            {/* For Tags */}
-            <input
-              type="text"
-              name="tags"
-              className="input-field"
-              placeholder="Tags"
-              value={postData.tags}
-              onChange={(e) =>
-                setPostData({ ...postData, tags: e.target.value.split(",") })
-              }
-            ></input>
-
-            {/* input file */}
-            <div className="input-field file-input">
-              <FileBase
-                type="file"
-                multiple={false}
-                onDone={({ base64 }) =>
-                  setPostData({ ...postData, selectedFile: base64 })
-                }
-              />
-              {/* Submit Button */}
-              <button className="btn btn-success input-field" type="submit">
-                Click To Submit
-              </button>
-              {/* Reset Button */}
-
-              <button className="btn btn-warning input-field" onClick={clear}>
-                Reset Form
-              </button>
-            </div>
+            <button className="btn btn-warning input-field" onClick={clear}>
+              Reset Form
+            </button>
           </div>
         </form>
       </div>

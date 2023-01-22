@@ -13,6 +13,7 @@ import Home from "./components/Home/Home";
 //styling elements
 import "bootstrap/dist/css/bootstrap.css";
 import "./styles.css";
+import { Container } from "@mui/material";
 
 //ADDING STYLES TO THE REACT APP USING MATERIAL UI
 // import useStyles from "./styles";
@@ -22,13 +23,13 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <div className="container">
+      <Container maxWidth="lg">
         <Navbar />
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/auth" exact component={Auth} />
         </Switch>
-      </div>
+      </Container>
     </BrowserRouter>
   );
 };
