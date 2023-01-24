@@ -54,7 +54,7 @@ const Form = ({ currentId, setCurrentId }) => {
   if (!user?.result?.name) {
     return (
       <Paper>
-        <Typography varient="h6" align="center">
+        <Typography varient="h6" align="center" className="paper">
           {" "}
           Please Sign In to create your own memories and like other's memories.
         </Typography>

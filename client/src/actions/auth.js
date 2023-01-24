@@ -6,10 +6,13 @@ export const signin = (formData, router) => async (dispatch) => {
     const { data } = await api.signIn(formData);
 
     dispatch({ type: AUTH, data });
-
     router.push("/");
   } catch (error) {
-    console.log(error);
+    // console.error(error);
+    return {
+      isSuccess: false,
+      message: error?.response?.data?.message || error?.message,
+    };
   }
 };
 
@@ -21,6 +24,10 @@ export const signup = (formData, router) => async (dispatch) => {
 
     router.push("/");
   } catch (error) {
-    console.log(error);
+    // console.log(error);
+    return {
+      isSuccess: false,
+      message: error?.response?.data?.message || error?.message,
+    };
   }
 };

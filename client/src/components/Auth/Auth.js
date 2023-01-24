@@ -31,7 +31,8 @@ const SignUp = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const [isValid, setIsValid] = useState(false);
+  const [error, setError] = useState("");
+  const [disableButton, setDisableButton] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -42,15 +43,30 @@ const SignUp = () => {
   const handleShowPassword = () =>
     setShowPassword((prevShowPassword) => !prevShowPassword);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (isSignup) {
-      setIsValid(dispatch(signup(formData, history)));
-      console.log(isValid);
+      setError("");
+      setDisableButton(true);
+      const { isSuccess, message } = await dispatch(signup(formData, history));
+      setDisableButton(false);
+      if (!isSuccess) {
+        setError(message);
+      } else {
+        setError("");
+      }
+      // console.log(error.message);
     } else {
-      setIsValid(dispatch(signin(formData, history)));
-      console.log(isValid);
+      setError("");
+      setDisableButton(true);
+      const { isSuccess, message } = await dispatch(signin(formData, history));
+      setDisableButton(false);
+      if (!isSuccess) {
+        setError(message);
+      } else {
+        setError("");
+      }
     }
   };
 
@@ -61,12 +77,24 @@ const SignUp = () => {
   const switchMode = () => {
     setFormData(initialState);
     setIsSignup((prevIsSignUp) => !prevIsSignUp);
+    setError("");
     setShowPassword(false);
+  };
+
+  const onClose = () => {
+    setError("");
   };
 
   return (
     <Container component="main">
       <Paper elevation={5}>
+        {error === "" ? (
+          <div className="error"></div>
+        ) : (
+          <Alert className="error" severity="error" onClose={onClose}>
+            {error}
+          </Alert>
+        )}
         <div className="main-container">
           <Avatar>
             <div>Icon</div>
@@ -100,6 +128,7 @@ const SignUp = () => {
                   handleChange={handleChange}
                   type="email"
                 />
+
                 <Input
                   name="password"
                   label="Password"
@@ -107,11 +136,7 @@ const SignUp = () => {
                   type={showPassword ? "text" : "password"}
                   handleShowPassword={handleShowPassword}
                 />
-                {isValid && (
-                  <Alert className="alert" severity="error">
-                    Password Does Not Match !! Please re-enter !!
-                  </Alert>
-                )}
+
                 {isSignup && (
                   <Input
                     name="confirmPassword"
@@ -123,7 +148,11 @@ const SignUp = () => {
               </Grid>
 
               <div className="submit-btn">
-                <button type="submit" className="btn btn-primary">
+                <button
+                  type="submit"
+                  disabled={disableButton}
+                  className="btn btn-primary"
+                >
                   {isSignup ? "Sign Up" : "Sign In"}
                 </button>
               </div>

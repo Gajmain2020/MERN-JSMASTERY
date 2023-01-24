@@ -49,8 +49,8 @@ function Navbar() {
           align="center"
         >
           Memories
+          <img className="image" src={memories} alt="icon" height="60" />
         </Typography>
-        <img className="image" src={memories} alt="icon" height="60" />
       </div>
 
       <Toolbar className="toolbar">
