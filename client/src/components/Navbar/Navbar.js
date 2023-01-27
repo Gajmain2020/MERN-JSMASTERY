@@ -5,7 +5,7 @@ import decode from "jwt-decode";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 
-import memories from "../../Images/memories.png";
+import memoriesLogo from "../../Images/memoriesLogo.png";
 
 import * as actionType from "../../constants/actionTypes";
 
@@ -40,18 +40,9 @@ function Navbar() {
 
   return (
     <AppBar position="static" id="appBar">
-      <div className="brandContainer">
-        <Typography
-          component={Link}
-          to="/"
-          className="heading"
-          variant="h2"
-          align="center"
-        >
-          Memories
-          <img className="image" src={memories} alt="icon" height="60" />
-        </Typography>
-      </div>
+      <a href="/" className="brandContainer">
+        <img className="logo" src={memoriesLogo} alt="icon" />
+      </a>
 
       <Toolbar className="toolbar">
         {user?.result ? (

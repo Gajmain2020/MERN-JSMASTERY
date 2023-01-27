@@ -3,22 +3,23 @@ import moment from "moment";
 
 import { useDispatch } from "react-redux";
 
-import { deletePost, likePost } from "../../../actions/posts";
+import { useHistory } from "react-router-dom";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { deletePost, likePost } from "../../../actions/posts";
 
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 
 //styling elements
 import "bootstrap/dist/css/bootstrap.css";
-import "./styles.css";
+import "./cardStyles.css";
 import {
   Card,
   CardMedia,
   Button,
   Typography,
   CardActions,
+  ButtonBase,
   CardContent,
 } from "@mui/material";
 
@@ -27,6 +28,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 const Post = ({ post, setCurrentId }) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const user = JSON.parse(localStorage.getItem("profile"));
 
   const Likes = () => {
@@ -57,40 +59,63 @@ const Post = ({ post, setCurrentId }) => {
     );
   };
 
+  const openPost = () => {
+    history.push(`/posts/${post._id}`);
+  };
+
   return (
-    <Card>
-      <CardMedia component="img" alt="green iguana" image={post.selectedFile} />
-      <div>
-        <Typography variant="h6">{post.name}</Typography>
-        <Typography variant="body2">
-          {moment(post.createdAt).fromNow()}
-        </Typography>
-      </div>
-      {user?.result?._id === post?.creator && (
-        <div>
-          <Button
-            onClick={() => setCurrentId(post._id)}
-            // style={{ color: "white" }}
-            size="large"
-          >
-            <MoreHorizIcon fontSize="default" color="black" />
-          </Button>
+    <Card className="card" raised elevation={6}>
+      <ButtonBase className="cardAction" onClick={openPost}>
+        <CardMedia
+          component="img"
+          alt="green iguana"
+          image={post.selectedFile}
+          className="media"
+        />
+        <div className="overlay">
+          <Typography className="leftAlign" variant="h6">
+            {post.name}
+          </Typography>
+          <Typography className="leftAlign" variant="body2">
+            {moment(post.createdAt).fromNow()}
+          </Typography>
         </div>
-      )}
-      <div>
-        <Typography variant="body2" color="textSecondary" component="h2">
-          {post.tags.map((tag) => `#${tag} `)}
+        {user?.result?._id === post?.creator && (
+          <div className="overlay2">
+            <Button
+              onClick={() => setCurrentId(post._id)}
+              // style={{ color: "white" }}
+              size="large"
+            >
+              <MoreHorizIcon fontSize="default" color="black" />
+            </Button>
+          </div>
+        )}
+        <div className="details">
+          <Typography
+            className="leftAlign"
+            variant="body2"
+            color="textSecondary"
+            component="h2"
+          >
+            {post.tags.map((tag) => `#${tag}  `)}
+          </Typography>
+        </div>
+        <Typography className="title" gutterBottom variant="h5" component="h2">
+          {post.title}
         </Typography>
-      </div>
-      <Typography gutterBottom variant="h5" component="h2">
-        {post.title}
-      </Typography>
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {post.message}
-        </Typography>
-      </CardContent>
-      <CardActions>
+        <CardContent>
+          <Typography
+            className="leftAlign"
+            variant="body2"
+            color="textSecondary"
+            component="p"
+          >
+            {post.message}
+          </Typography>
+        </CardContent>
+      </ButtonBase>
+      <CardActions className="cardActions">
         <Button
           size="small"
           color="primary"
