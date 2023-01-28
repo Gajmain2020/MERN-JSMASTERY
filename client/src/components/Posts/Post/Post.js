@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import moment from "moment";
 
 import { useDispatch } from "react-redux";
@@ -30,9 +30,14 @@ const Post = ({ post, setCurrentId }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const user = JSON.parse(localStorage.getItem("profile"));
+  const [likes, setLikes] = useState(post?.likes);
+
+  const handleLik = () => {
+    dispatch(likePost(post._id));
+  };
 
   const Likes = () => {
-    if (post.likes.length > 0) {
+    if (post?.likes?.length > 0) {
       return post.likes.find(
         (like) => like === (user?.result?.googleId || user?.result?._id)
       ) ? (
@@ -116,12 +121,7 @@ const Post = ({ post, setCurrentId }) => {
         </CardContent>
       </ButtonBase>
       <CardActions className="cardActions">
-        <Button
-          size="small"
-          color="primary"
-          disabled={!user?.result}
-          onClick={() => dispatch(likePost(post._id))}
-        >
+        <Button size="small" color="primary" disabled={!user?.result}>
           <Likes />
         </Button>
         {user?.result?._id === post?.creator && (
